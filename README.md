@@ -2,6 +2,7 @@
 
 A comprehensive supply chain optimization agentic solution for distribution networks using Databricks.
 
+
 ## Project Overview
 
 This project demonstrates a supply chain optimization solution, with 3 manufacturing plants delivering 30 product SKUs to 5 distribution centers, which in turn serve 30-60 wholesalers each. The solution leverages Databricks' distributed computing capabilities to:
@@ -145,3 +146,4 @@ The solution uses the following key tables:
 ## Acknowledgments
 
 This project is based on Databricks' supply chain optimization solution accelerator available at: https://github.com/databricks-industry-solutions/supply-chain-optimization
+I augmented this initial accelerator with functions to make it agentic and synthetic data to create fake emails. Thanks to Puneet Jain for modularizing the notebooks! 
