@@ -1,5 +1,5 @@
 # Databricks notebook source
-# MAGIC %md Credits: This is adapted from a solution accelerator for supply chain optimization, available at https://github.com/databricks-industry-solutions/supply-chain-optimization. For more information about this solution accelerator, visit https://www.databricks.com/solutions/accelerators/supply-chain-distribution-optimization. 
+# MAGIC %md Credits: This is adapted from a Databricks solution accelerator for supply chain optimization, available at https://github.com/databricks-industry-solutions/supply-chain-optimization. For more information about this solution accelerator, visit https://www.databricks.com/solutions/accelerators/supply-chain-distribution-optimization. 
 
 # COMMAND ----------
 
@@ -16,15 +16,6 @@
 # MAGIC - a mapping table that uniquely assigns each distribution center to a wholesaler. This is a simplification as it is possible that one wholesaler obtains products from different distribution centers.
 # MAGIC - a table that assigns the costs of shipping a product from each manufacturing plant to each distribution center
 # MAGIC - a table of the maximum quantities of product that can be produced and shipped from each plant to each of the distribution centers
-# MAGIC
-# MAGIC
-# MAGIC **We proceed in 2 steps**:
-# MAGIC - *Demand Forecasting*: The demand forecast is first estimated one week ahead. Aggregation yields the demand for each distribution center: 
-# MAGIC   - For the demand series for each product within each wholesaler we generate a one-week-ahead forecast
-# MAGIC   - For the distribution center, we derive next week's estimated demand for each product
-# MAGIC - *Minimization of transportation costs*: From the cost and constraints tables of producing by and shipping from a plant to a distribution center we derive cost-optimal transportation.
-# MAGIC
-# MAGIC <img src="https://raw.githubusercontent.com/databricks-industry-solutions/supply-chain-optimization/main/pictures/Plant_DistributionCenter_Store_Prouct_2.png" width=70%>
 
 # COMMAND ----------
 
@@ -41,9 +32,8 @@
 
 # COMMAND ----------
 
-# Note: dbutils is automatically available in Databricks notebooks
 # Create widgets for catalog and database names
-dbutils.widgets.text("catalog_name", "supply_chain", "Catalog Name")
+dbutils.widgets.text("catalog_name", "main", "Catalog Name")
 dbutils.widgets.text("db_name", "supply_chain_db", "Database Name")
 
 # Get values from widgets
@@ -55,9 +45,58 @@ print(f"Using catalog: {catalog_name}")
 print(f"Using database: {db_name}")
 
 # COMMAND ----------
+
 # Create catalog and schema
 spark.sql(f"CREATE CATALOG IF NOT EXISTS {catalog_name}")
 spark.sql(f"CREATE SCHEMA IF NOT EXISTS {db_name}")
 
 # COMMAND ----------
-# MAGIC %run ./_resources/00-setup $reset_all_data=true $catalogName=$catalog_name $dbName=$db_name
+
+# MAGIC %run ./_resources/00-setup $reset_all_data=true $catalog_name=main $db_name=supply_chain_db
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC # Next steps
+# MAGIC
+# MAGIC You have two options to run the subsequent notebooks: 
+# MAGIC - Option 1: Run each subsequent notebook in numerical order to follow the end-to-end process
+# MAGIC - Option 2: Run all subsequent notebooks at once below by using a magic command.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC # Optional
+# MAGIC
+# MAGIC You can run all the notebooks below with a magic command. 
+
+# COMMAND ----------
+
+# MAGIC %run ./02_Fine_Grained_Demand_Forecasting $catalog_name=main $db_name=supply_chain_db
+
+# COMMAND ----------
+
+# MAGIC %run ./03_Derive_Raw_Material_Demand $catalog_name=main $db_name=supply_chain_db
+
+# COMMAND ----------
+
+# MAGIC %run ./04_Optimize_Transportation $catalog_name=main $db_name=supply_chain_db
+
+# COMMAND ----------
+
+# MAGIC %run ./05_Data_Analysis_&_Functions $catalog_name=main $db_name=supply_chain_db
+
+# COMMAND ----------
+
+# MAGIC %run ./06_Vector_Search $catalog_name=main $db_name=supply_chain_db
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC # Warning
+# MAGIC Note that the vector search index will take a few minutes to get up and running. 
+# MAGIC
+
+# COMMAND ----------
+
+# MAGIC %run ./07_More_Functions $catalog_name=main $db_name=supply_chain_db

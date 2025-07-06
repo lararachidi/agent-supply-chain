@@ -1,6 +1,6 @@
 # Databricks notebook source
-dbutils.widgets.text('catalogName',  '####CHANGE THIS####' , 'Catalog Name')
-dbutils.widgets.text('dbName',  '####CHANGE THIS####' , 'Database Name')
+dbutils.widgets.text('catalogName',  'main' , 'Catalog Name')
+dbutils.widgets.text('dbName',  'supply_chain_db' , 'Database Name')
 
 # COMMAND ----------
 

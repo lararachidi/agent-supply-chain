@@ -1,5 +1,5 @@
 # Databricks notebook source
-# MAGIC %md This notebook is available at https://github.com/databricks-industry-solutions/supply-chain-optimization. For more information about this solution accelerator, visit https://www.databricks.com/solutions/accelerators/supply-chain-distribution-optimization.
+# MAGIC %md This project is based on Databricks' supply chain optimization solution accelerator available at: https://github.com/databricks-industry-solutions/supply-chain-optimization. For more information about this solution accelerator, visit https://www.databricks.com/solutions/accelerators/supply-chain-distribution-optimization.
 
 # COMMAND ----------
 
@@ -39,7 +39,7 @@
 # COMMAND ----------
 
 # Create widgets for catalog and database names
-dbutils.widgets.text("catalog_name", "supply_chain", "Catalog Name")
+dbutils.widgets.text("catalog_name", "main", "Catalog Name")
 dbutils.widgets.text("db_name", "supply_chain_db", "Database Name")
 
 # COMMAND ----------
@@ -310,7 +310,3 @@ display(spark.sql(f"SELECT * FROM {catalogName}.{dbName}.shipment_recommendation
 # MAGIC | library                                | description             | license    | source                                              |
 # MAGIC |----------------------------------------|-------------------------|------------|-----------------------------------------------------|
 # MAGIC | pulp                                 | A python Linear Programming API      | https://github.com/coin-or/pulp/blob/master/LICENSE        | https://github.com/coin-or/pulp                      |
-
-# COMMAND ----------
-
-

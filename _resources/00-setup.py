@@ -1,7 +1,7 @@
 # Databricks notebook source
 dbutils.widgets.dropdown("reset_all_data", "false", ["true", "false"], "Reset all data")
-dbutils.widgets.text("catalog_name", "hackathon_master", "Catalog Name")
-dbutils.widgets.text("db_name", "hackathon_master", "Database Name")
+dbutils.widgets.text("catalog_name", "main",            "Catalog Name")   # we already set this to main
+dbutils.widgets.text("db_name",      "supply_chain_db", "Database Name")  # ← new default
 
 # COMMAND ----------
 
@@ -40,7 +40,7 @@ if (os.path.basename(dirname) != '_resources'):
 generate_data_notebook_path = os.path.join(dirname,filename)
 
 def generate_data():
-    dbutils.notebook.run(generate_data_notebook_path, 600, 
+    dbutils.notebook.run(generate_data_notebook_path, 1800, 
                          {"reset_all_data": dbutils.widgets.get("reset_all_data"), 
                           "dbName": dbName, 
                           "catalogName": catalogName})

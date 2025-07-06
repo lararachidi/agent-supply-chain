@@ -6,7 +6,7 @@ dbutils.library.restartPython()
 # COMMAND ----------
 
 # Create widgets for catalog and database names
-dbutils.widgets.text("catalog_name", "supply_chain", "Catalog Name")
+dbutils.widgets.text("catalog_name", "main", "Catalog Name")
 dbutils.widgets.text("db_name", "supply_chain_db", "Database Name")
 
 # COMMAND ----------
@@ -230,22 +230,29 @@ db_name = dbutils.widgets.get("db_name")
 
 # COMMAND ----------
 
-import time
-
 from databricks.sdk import WorkspaceClient
+from databricks.sdk.errors import ResourceAlreadyExists, ResourceDoesNotExist
 
 w = WorkspaceClient()
 
-key_name = f"pat_token"
+scope_name = "supply_chain"
+key_name   = "pat_token"
+secret_val = "<add your secret here>"
 
-scope_name = f"supply_chain"
 
-# w.secrets.create_scope(scope=scope_name)
-# w.secrets.put_secret(scope=scope_name, key=key_name, string_value=f"<add your secret here>")
+# Create the scope only if it is not already defined
+existing_scopes = {s.name for s in w.secrets.list_scopes()}
+if scope_name not in existing_scopes:
+    w.secrets.create_scope(scope=scope_name)
 
-# cleanup
-# w.secrets.delete_secret(scope=scope_name, key=key_name)
-# w.secrets.delete_scope(scope=scope_name)
+
+# Put (create or overwrite) the secret inside the scope
+w.secrets.put_secret(
+    scope=scope_name,
+    key=key_name,
+    string_value=secret_val,   # overwrite if it exists
+)
+
 
 # COMMAND ----------
 
@@ -325,7 +332,7 @@ RETURN SELECT CONCAT(
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC CREATE OR REPLACE FUNCTION execute_code_sandbox(
+# MAGIC CREATE OR REPLACE FUNCTION main.supply_chain_db.execute_code_sandbox(
 # MAGIC   raw_code STRING COMMENT 'proper python code to be executed, this will run with the exec command',
 # MAGIC   return_variable_name STRING COMMENT 'variable name to return from the code as a string'
 # MAGIC   )
