@@ -1,7 +1,7 @@
 # Databricks notebook source
 dbutils.widgets.dropdown('reset_all_data', 'false', ['true', 'false'], 'Reset all data')
-dbutils.widgets.text('catalogName',  '####CHANGE THIS####', 'Catalog Name')
-dbutils.widgets.text('dbName',  '####CHANGE THIS####' , 'Database Name')
+dbutils.widgets.text('catalogName',  'main', 'Catalog Name')
+dbutils.widgets.text('dbName',  'supply_chain_db' , 'Database Name')
 
 # COMMAND ----------
 
@@ -21,10 +21,9 @@ print(dbName)
 
 # COMMAND ----------
 
-spark.sql(f"CREATE CATALOG if NOT EXISTS {catalogName} ")
-spark.sql(f"USE CATALOG {catalogName}")
-spark.sql(f"CREATE SCHEMA IF NOT EXISTS {dbName} ")
-spark.sql(f"USE SCHEMA {dbName}")
+spark.sql(f"USE CATALOG `{catalogName}`")
+spark.sql(f"CREATE SCHEMA IF NOT EXISTS `{dbName}`")
+spark.sql(f"USE SCHEMA `{dbName}`")
 
 # COMMAND ----------
 
@@ -528,7 +527,7 @@ display(spark.sql(f"SELECT * FROM {dbName}.plant_supply"))
 
 # COMMAND ----------
 
-%pip install networkx --quiet
+# MAGIC %pip install networkx --quiet
 
 # COMMAND ----------
 
