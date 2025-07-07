@@ -10,6 +10,21 @@ dbutils.library.restartPython()
 
 # COMMAND ----------
 
+from databricks.sdk import WorkspaceClient, errors
+
+try:
+    WorkspaceClient().secrets.get_secret(
+        scope="my_openai_secret_scope",
+        key="openai_api_key"
+    )
+except errors.ResourceDoesNotExist:
+    raise RuntimeError(
+        "Secret `my_openai_secret_scope/openai_api_key` not found. "
+        "Run 01_Introduction_And_Setup.py first, or create it manually."
+    )
+
+# COMMAND ----------
+
 # Create widgets for catalog and database names
 dbutils.widgets.text("catalog_name", "main", "Catalog Name")
 dbutils.widgets.text("db_name", "supply_chain_db", "Database Name")

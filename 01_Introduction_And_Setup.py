@@ -46,6 +46,40 @@ print(f"Using database: {db_name}")
 
 # COMMAND ----------
 
+# Widget to capture the OpenAI key 
+dbutils.widgets.text(
+    "openai_api_key",                       # widget name
+    "",                                     # default (leave blank once the secret exists)
+    "OpenAI API Key (optional)"
+)
+
+
+# COMMAND ----------
+
+# One‑time creation / update of the secret
+from databricks.sdk import WorkspaceClient
+
+scope_name = "my_openai_secret_scope"       # reuse if you already have one
+key_name   = "openai_api_key"
+key_value  = dbutils.widgets.get("openai_api_key").strip()
+
+w = WorkspaceClient()
+
+# create the scope once
+if scope_name not in {s.name for s in w.secrets.list_scopes()}:
+    w.secrets.create_scope(scope=scope_name)
+    print(f"Created secret scope `{scope_name}`")
+
+# upsert only when the user actually pasted a key
+if key_value:
+    w.secrets.put_secret(scope=scope_name, key=key_name, string_value=key_value)
+    print(f"Stored new value for `{scope_name}/{key_name}`")
+else:
+    print(f"No key supplied. Assuming `{scope_name}/{key_name}` already exists.")
+
+
+# COMMAND ----------
+
 # Create catalog and schema
 spark.sql(f"CREATE CATALOG IF NOT EXISTS {catalog_name}")
 spark.sql(f"CREATE SCHEMA IF NOT EXISTS {db_name}")
