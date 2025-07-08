@@ -332,7 +332,7 @@ RETURN SELECT CONCAT(
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC CREATE OR REPLACE FUNCTION main.supply_chain_db.execute_code_sandbox(
+# MAGIC CREATE OR REPLACE FUNCTION execute_code_sandbox(
 # MAGIC   raw_code STRING COMMENT 'proper python code to be executed, this will run with the exec command',
 # MAGIC   return_variable_name STRING COMMENT 'variable name to return from the code as a string'
 # MAGIC   )

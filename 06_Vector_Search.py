@@ -10,21 +10,6 @@ dbutils.library.restartPython()
 
 # COMMAND ----------
 
-from databricks.sdk import WorkspaceClient, errors
-
-try:
-    WorkspaceClient().secrets.get_secret(
-        scope="my_openai_secret_scope",
-        key="openai_api_key"
-    )
-except errors.ResourceDoesNotExist:
-    raise RuntimeError(
-        "Secret `my_openai_secret_scope/openai_api_key` not found. "
-        "Run 01_Introduction_And_Setup.py first, or create it manually."
-    )
-
-# COMMAND ----------
-
 # Create widgets for catalog and database names
 dbutils.widgets.text("catalog_name", "main", "Catalog Name")
 dbutils.widgets.text("db_name", "supply_chain_db", "Database Name")
@@ -35,6 +20,12 @@ dbutils.widgets.text("db_name", "supply_chain_db", "Database Name")
 catalog_name = dbutils.widgets.get("catalog_name")
 db_name = dbutils.widgets.get("db_name")
 
+
+# COMMAND ----------
+
+# Display the values being used
+print(f"Using catalog: {catalog_name}")
+print(f"Using database: {db_name}")
 
 # COMMAND ----------
 
@@ -166,7 +157,7 @@ current_endpoint_name = get_or_create_endpoint(endpoint_name)
 # MAGIC
 # MAGIC If you don't want to use secrets, instead of 
 # MAGIC
-# MAGIC `"openai_api_key": "{{secrets/my_openai_secret_scope/openai_api_key}}"`
+# MAGIC `"openai_api_key": "{{secrets/openai_secret_scope/openai_secret_key}}"`
 # MAGIC
 # MAGIC you can use: 
 # MAGIC
@@ -207,7 +198,7 @@ def get_or_create_endpoint(endpoint_name: str) -> str:
                         "provider": "openai",
                         "task": "llm/v1/embeddings",
                         "openai_config": {
-                            "openai_api_key": "{{secrets/my_openai_secret_scope/openai_api_key}}" # replace with your own secret 
+                            "openai_api_key": "{{secrets/openai_secret_scope/openai_secret_key}}" # make sure it matches the secret scope and key that were defined in notebook 1 
                         }
                     }
                 }
@@ -236,7 +227,7 @@ def create_vector_search_index(name,source_table_fullname):
         "index_name": name,
         "endpoint_name": current_endpoint_name,
         "primary_key": "Date",  # Using Date as the primary key
-        "embedding_model_endpoint_name": current_embedding_endpoint_name,  # Using OpenAI embedding model,
+        "embedding_model_endpoint_name": current_embedding_endpoint_name,  # Using OpenAI embedding model
         "embedding_source_column": "Content",
         "pipeline_type" : "CONTINUOUS", # Can be changed to TRIGGERED 
         "source_table_name": source_table_fullname
@@ -267,12 +258,6 @@ index_name = create_vector_search_index(name,source_table_fullname)
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## Query the Vector Index
-# MAGIC Below is an example of how to perform a vector similarity search using the created index. You can uncomment to run the cell.
-
-# COMMAND ----------
-
 # Example of how to perform a vector search
 def vector_similarity_search(index_name ,query_text, num_results=5):
     try:
@@ -298,4 +283,7 @@ def vector_similarity_search(index_name ,query_text, num_results=5):
 # COMMAND ----------
 
 # Test function with a sample query
-vector_similarity_search(index_name ,"delays in delivery to distribution center 2").display()
+# vector_similarity_search(index_name ,"delays in delivery to distribution center 2").display()
+
+# COMMAND ----------
+
