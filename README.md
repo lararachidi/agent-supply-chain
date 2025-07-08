@@ -47,6 +47,7 @@ These resource notebooks will create the following tables that we will leverage 
 - `bom`: Bill of materials with material relationships
 - `plant_supply`: Maximum supply capacity by plant and product
 - `transport_cost`: Transportation costs between plants and distribution centers
+- `list_prices`: Price for each product 
 
 
 ## Notebooks
