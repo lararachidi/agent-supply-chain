@@ -30,8 +30,8 @@ The solution follows this workflow:
   - `catalog_name`: Databricks catalog name (default: "main")
   - `db_name`: Database name (default: "supply_chain_db")
 5. **You have two options to run the subsequent notebooks**
-- Option 1: Run each subsequent notebook in numerical order to follow the end-to-end process
-- Option 2: Run all subsequent notebooks at once below by using a magic command.
+- Option 1: Run all subsequent notebooks at once below by using a magic command.
+- Option 2: Run each subsequent notebook manually in numerical order to follow the end-to-end process
 
 
 ## Supply chain data
